@@ -1,0 +1,24 @@
+.form {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  min-width: 250px;
+}
