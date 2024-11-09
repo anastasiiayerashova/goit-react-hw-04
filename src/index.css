@@ -63,3 +63,10 @@ button {
     background-color: #f9f9f9;
   }
 }
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}

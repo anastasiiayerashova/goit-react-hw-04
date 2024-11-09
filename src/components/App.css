@@ -7,3 +7,9 @@
   text-align: center;
   font-family: "Roboto Mono", monospace;
 }
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

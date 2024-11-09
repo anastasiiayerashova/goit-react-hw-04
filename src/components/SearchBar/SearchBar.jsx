@@ -17,13 +17,15 @@ export default function SearchBar({ onSubmit }) {
    }
 
     return (
-        <> 
-        <form onSubmit={handleSubmit} className={s.form}>
+        <header> 
+            <form onSubmit={handleSubmit} className={s.form}>
+                <div className={s.inputWrapper}>  
             <button type='submit' className={s.btn}><FiSearch className={s.icon} /></button>
             <input type='text' name='query' autoComplete='off' autoFocus placeholder='Search images and photos' className={s.input}></input>
+            </div>
             </form>
             <Toaster />
-            </>
+            </header>
         
     )
 }

@@ -6,7 +6,7 @@ export const fetchData = async (query, page = 1) => {
     const params = new URLSearchParams({
         query: query,
         per_page: 12,
-        page,
+        page: page,
     })
     const response = await axios.get(`/search/photos?client_id=${key}&${params}`)
     return response.data.results
