@@ -9,4 +9,5 @@ const LoadMoreBtn = forwardRef(({onSubmit}, ref) => {
 )
 })
 
+LoadMoreBtn.displayName = 'LoadMoreBtn';
 export default LoadMoreBtn;

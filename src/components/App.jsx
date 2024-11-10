@@ -1,6 +1,6 @@
 import './App.css'
 import { fetchData } from '../unsplash-api';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import SearchBar from './SearchBar/SearchBar';
 import Loader from './Loader/Loader';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
@@ -14,11 +14,12 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(null)
-  const loadMoreRef = useRef(null)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const loadMoreRef = useRef(null);
    
-  const handleSearch = async (newQuery) => {
+  const handleSearch = useCallback(async (newQuery) => {
+    if (newQuery === query) return
     try {
       setQuery(newQuery)
       setPage(1)
@@ -37,7 +38,7 @@ export default function App() {
     finally {
       setLoading(false)
     }
-  }
+  }, [query]) //useCallback для запобігання непотрібним запитам
   
   const handleLoadMore = async () => {
     const nextPage = page + 1;
@@ -70,7 +71,7 @@ export default function App() {
   }
   
   useEffect(() => {
-    
+
     const handleKeyDown = (e) => {
       if (isModalOpen && e.key === 'Escape') {
         closeModal()
