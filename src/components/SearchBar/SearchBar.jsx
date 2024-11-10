@@ -8,10 +8,12 @@ export default function SearchBar({ onSubmit }) {
         e.preventDefault();
         const form = e.target;
         const query = form.elements.query.value;
+
         if (form.elements.query.value.trim() === '') {
             toast.error('Please enter something...')
             return
         }
+
         onSubmit(query)
         form.reset()
    }
@@ -26,6 +28,5 @@ export default function SearchBar({ onSubmit }) {
             </form>
             <Toaster />
             </header>
-        
     )
 }

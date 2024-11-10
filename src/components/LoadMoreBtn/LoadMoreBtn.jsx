@@ -1,9 +1,12 @@
+import { forwardRef } from 'react';
 import s from './LoadMoreBtn.module.css';
 
-export default function LoadMoreBtn({onSubmit}) {
+const LoadMoreBtn = forwardRef(({onSubmit}, ref) => {
     return (
-        <div>
-            <button type='submit' className={s.btn} onClick={onSubmit}>Load more</button>
-        </div>
-    )
-}
+     <div>
+        <button type='submit' className={s.btn} onClick={onSubmit} ref={ref}>Load more</button>
+     </div>
+)
+})
+
+export default LoadMoreBtn;

@@ -1,14 +1,12 @@
 import './App.css'
 import { fetchData } from '../unsplash-api';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SearchBar from './SearchBar/SearchBar';
 import Loader from './Loader/Loader';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import ImageGallery from './ImageGallery/ImageGallery';
 import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 import ImageModal from './ImageModal/ImageModal';
-import ReactModal from 'react-modal';
-
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -16,8 +14,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
-  const [loadingBtn, setLoadingBtn] = useState(false)
-  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const loadMoreRef = useRef(null)
    
   const handleSearch = async (newQuery) => {
     try {
@@ -43,32 +42,54 @@ export default function App() {
   const handleLoadMore = async () => {
     const nextPage = page + 1;
     setPage(nextPage)
-    setLoadingBtn(true)
 
     try {
       const result = await fetchData(query, nextPage)
       setData((prev) => [...prev, ...result])
+
+      if (loadMoreRef.current) {
+        loadMoreRef.current.scrollIntoView({ behavior: 'smooth' });
+
+     }
     }
 
     catch (error) {
       console.log(error)
       setError(true)
     }
-
-    finally {
-      setLoadingBtn(false)
-    }
   }
 
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedImage(null)
+  }
+  
+  useEffect(() => {
+    
+    const handleKeyDown = (e) => {
+      if (isModalOpen && e.key === 'Escape') {
+        closeModal()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
+  
   return (
     <div className='mainWrapper'>
       <SearchBar onSubmit={handleSearch} />
-      {loading && <Loader loading={loading} />}
+      {loading && <Loader />}
       {error && <ErrorMessage />}
-      {query !== '' && data.length <= 0 && <ErrorMessage />}
-      {data.length > 0 && <ImageGallery data={data} />}
-      {data.length > 0 && !loading && <LoadMoreBtn onSubmit={handleLoadMore} />}
-      {loadingBtn && <Loader />}
+      {query !== '' && data.length <= 0 && !loading && <ErrorMessage />}
+      {data.length > 0 && <ImageGallery data={data} onImageClick={openModal} />}
+      {data.length > 0 && data.length % 12 === 0 && <LoadMoreBtn onSubmit={handleLoadMore} ref={loadMoreRef} />}
+      <ImageModal isOpen={isModalOpen} onRequestClose={closeModal} image={selectedImage} />
     </div>
   )
 }
