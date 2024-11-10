@@ -2,7 +2,6 @@ import s from './ImageModal.module.css';
 import ReactModal from 'react-modal';
 import { FaRegHeart } from "react-icons/fa6";
 ReactModal.setAppElement('#root')
-import LazyLoad from 'react-lazyload';
 
 export default function ImageModal({ isOpen, onRequestClose, image }) {
    
@@ -24,7 +23,6 @@ export default function ImageModal({ isOpen, onRequestClose, image }) {
     }
 
     return (
-        <LazyLoad offset={100}> 
         <ReactModal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
                 {image &&  
                 <>  
@@ -34,6 +32,5 @@ export default function ImageModal({ isOpen, onRequestClose, image }) {
                 </>
             }
             </ReactModal>
-             </LazyLoad>
     )
 }
