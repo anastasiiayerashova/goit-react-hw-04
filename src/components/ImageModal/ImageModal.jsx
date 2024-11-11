@@ -8,7 +8,7 @@ export default function ImageModal({ isOpen, onRequestClose, image }) {
    
     const customStyles = {
         overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             cursor: 'pointer',
         },
         content: {

@@ -7,6 +7,7 @@ import ErrorMessage from './ErrorMessage/ErrorMessage';
 import ImageGallery from './ImageGallery/ImageGallery';
 import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 import ImageModal from './ImageModal/ImageModal';
+import { ImSad } from "react-icons/im";
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -18,7 +19,7 @@ export default function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const loadMoreRef = useRef(null);
    
-  const handleSearch = useCallback(async (newQuery) => {
+  const handleSearch = useCallback(async (newQuery, page) => {
     if (newQuery === query) return
     try {
       setQuery(newQuery)
@@ -26,7 +27,7 @@ export default function App() {
       setData([])
       setError(false)
       setLoading(true)
-      const result = await fetchData(newQuery, 1)
+      const result = await fetchData(newQuery, page)
       setData(result)
     }
   
@@ -38,7 +39,7 @@ export default function App() {
     finally {
       setLoading(false)
     }
-  }, [query]) //useCallback для запобігання непотрібним запитам
+  }, [query, page]) //useCallback для запобігання непотрібним запитам
   
   const handleLoadMore = async () => {
     const nextPage = page + 1;
@@ -50,7 +51,6 @@ export default function App() {
 
       if (loadMoreRef.current) {
         loadMoreRef.current.scrollIntoView({ behavior: 'smooth' });
-
      }
     }
 
@@ -87,7 +87,7 @@ export default function App() {
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      {query !== '' && data.length <= 0 && !loading && <ErrorMessage />}
+      {query !== '' && data.length <= 0 && !loading && !error && (<p>Unfortunately, no results were found...<ImSad size={24}/></p>)}
       {data.length > 0 && <ImageGallery data={data} onImageClick={openModal} />}
       {data.length > 0 && data.length % 12 === 0 && <LoadMoreBtn onSubmit={handleLoadMore} ref={loadMoreRef} />}
       <ImageModal isOpen={isModalOpen} onRequestClose={closeModal} image={selectedImage} />
